@@ -3,126 +3,893 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Name — Tagline</title>
-  <meta name="description" content="Your project description for SEO.">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>BB Directory — Brightbase Project Directory</title>
+  <meta name="description" content="All Brightbase projects deployed across bbase.ai — tools, sites, templates, and experiments.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            surface: { 1: '#09090b', 2: '#0f0f12', 3: '#16161a', 4: '#1e1e24' },
-            coral: { DEFAULT: '#e8735e', light: '#f09a8a', dark: '#c45a47' },
-            amber: { DEFAULT: '#d4a23a', light: '#e4be6a' },
-            zinc: { 50: '#fafafa', 100: '#f4f4f5', 200: '#e4e4e7', 300: '#d4d4d8', 400: '#a1a1aa', 500: '#71717a', 600: '#52525b', 700: '#3f3f46', 800: '#27272a', 900: '#18181b' }
-          },
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
-            mono: ['"JetBrains Mono"', 'monospace']
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fragment+Mono:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.13/dist/lenis.css">
+
   <style>
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    /* ================================================
+       TOKENS — DS3
+       ================================================ */
+    :root {
+      --bb-primary: #FE4E18;
+      --bb-primary-light: #FF7A4D;
+      --bb-primary-dark: #D93D0F;
+      --bb-secondary: #34474E;
+      --bb-secondary-light: #4A6068;
+      --bb-neutral: #6B7280;
+      --bb-neutral-light: #9CA3AF;
+
+      --bb-cream: #E8E4DD;
+      --bb-cream-light: #F2EFE9;
+      --bb-cream-lighter: #F7F5F1;
+      --bb-cream-lightest: #FFFDF6;
+
+      --bb-dark: #0D1E24;
+      --bb-dark-2: #132A32;
+      --bb-dark-3: #1A3540;
+      --bb-dark-card: #0F2229;
+      --bb-dark-elevated: #17303A;
+
+      --bb-text-primary: #0D1E24;
+      --bb-text-secondary: #34474E;
+      --bb-text-muted: #6B7280;
+      --bb-text-subtle: #9CA3AF;
+      --bb-text-on-dark: #E8E4DD;
+      --bb-text-on-dark-muted: #8A9BA3;
+      --bb-text-on-dark-subtle: #5A6E78;
+      --bb-text-on-primary: #FFFDF6;
+
+      --bb-border-warm: #D6D1C9;
+      --bb-border-warm-strong: #C4BEB5;
+      --bb-border-cool: rgba(232, 228, 221, 0.08);
+      --bb-border-cool-strong: rgba(232, 228, 221, 0.15);
+
+      --bb-primary-10: rgba(254, 78, 24, 0.10);
+      --bb-primary-15: rgba(254, 78, 24, 0.15);
+      --bb-cream-6: rgba(232, 228, 221, 0.06);
+      --bb-cream-10: rgba(232, 228, 221, 0.10);
+      --bb-cream-15: rgba(232, 228, 221, 0.15);
+
+      --bb-font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      --bb-font-mono: 'Fragment Mono', 'JetBrains Mono', monospace;
+      --bb-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+      --bb-ease-bounce: cubic-bezier(0.23, 1, 0.32, 1);
+      --bb-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --bb-radius-full: 100vw;
+      --bb-site-padding: 32px;
+      --bb-max-width: 1440px;
+
+      --bb-shadow-sm: 0 1px 2px rgba(13,30,36,0.04);
+      --bb-shadow-md: 0 4px 12px rgba(13,30,36,0.06);
+      --bb-shadow-lg: 0 12px 32px rgba(13,30,36,0.10);
+      --bb-shadow-card-warm: 0 1px 3px rgba(13,30,36,0.04), 0 0 0 1px rgba(13,30,36,0.03);
+      --bb-shadow-card-dark: inset 0 1px 0 rgba(232,228,221,0.06), 0 4px 24px rgba(0,0,0,0.3);
+      --bb-shadow-glow-primary: 0 0 40px rgba(254,78,24,0.15);
+    }
+
+    /* ================================================
+       RESET & BASE
+       ================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: auto; }
+    body {
+      font-family: var(--bb-font-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      background: var(--bb-cream-light);
+      color: var(--bb-text-primary);
+      overflow-x: hidden;
+    }
+    a { text-decoration: none; color: inherit; }
+
+    /* ================================================
+       TYPOGRAPHY
+       ================================================ */
+    .bb-heading { font-size: clamp(36px, 6vw, 96px); font-weight: 500; line-height: 0.92; letter-spacing: -0.031em; }
+    .bb-subheading { font-size: clamp(24px, 3vw, 48px); font-weight: 600; line-height: 1.0; letter-spacing: -0.02em; }
+    .bb-title { font-size: clamp(20px, 2vw, 32px); font-weight: 600; line-height: 1.1; letter-spacing: -0.01em; }
+    .bb-body { font-size: 16px; font-weight: 400; line-height: 1.6; letter-spacing: -0.01em; }
+    .bb-body-sm { font-size: 14px; font-weight: 400; line-height: 1.5; }
+    .bb-label { font-family: var(--bb-font-mono); font-size: 10px; font-weight: 300; letter-spacing: 0.05em; text-transform: uppercase; padding: 6px 0; }
+    .bb-mono { font-family: var(--bb-font-mono); font-size: 14px; line-height: 1.6; }
+
+    /* ================================================
+       NAV
+       ================================================ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px var(--bb-site-padding);
+      display: flex; justify-content: space-between; align-items: center;
+      backdrop-filter: blur(16px); background: rgba(242, 239, 233, 0.85);
+      border-bottom: 1px solid var(--bb-border-warm);
+    }
+    .nav-logo { font-family: var(--bb-font-mono); font-size: 13px; font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; color: var(--bb-text-muted); }
+    .nav-logo span { color: var(--bb-primary); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { font-family: var(--bb-font-mono); font-size: 11px; letter-spacing: 0.03em; text-transform: uppercase; color: var(--bb-text-muted); transition: color 0.15s; }
+    .nav-links a:hover { color: var(--bb-text-primary); }
+    @media (max-width: 768px) { .nav-links { display: none; } }
+
+    /* ================================================
+       HERO
+       ================================================ */
+    .hero {
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 160px var(--bb-site-padding) 80px;
+      position: relative; overflow: hidden;
+      background: var(--bb-dark); color: var(--bb-text-on-dark);
+    }
+    .hero-inner { max-width: var(--bb-max-width); margin: 0 auto; width: 100%; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 32px; color: var(--bb-text-on-dark-subtle); }
+    .hero-title { max-width: 800px; margin-bottom: 32px; }
+    .hero-description { max-width: 520px; margin-bottom: 48px; font-size: 16px; line-height: 1.6; color: var(--bb-text-on-dark-muted); }
+    .hero-glow {
+      position: absolute; width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(254,78,24,0.05) 0%, transparent 70%);
+      top: 10%; right: -10%; pointer-events: none;
+    }
+    .hero-stats { display: flex; gap: 48px; flex-wrap: wrap; }
+    .hero-stat-number { font-family: var(--bb-font-mono); font-size: 32px; font-weight: 300; color: var(--bb-primary); }
+    .hero-stat-label { font-family: var(--bb-font-mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--bb-text-on-dark-subtle); margin-top: 4px; }
+
+    /* ================================================
+       FILTER BAR
+       ================================================ */
+    .filter-bar {
+      position: sticky; top: 61px; z-index: 50;
+      background: rgba(242, 239, 233, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--bb-border-warm);
+      padding: 16px var(--bb-site-padding);
+    }
+    .filter-inner {
+      max-width: var(--bb-max-width); margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+    .filter-pill {
+      display: inline-flex; padding: 6px 14px;
+      font-family: var(--bb-font-mono); font-size: 11px;
+      letter-spacing: 0.02em; text-transform: uppercase;
+      border-radius: var(--bb-radius-full);
+      border: 1px solid var(--bb-border-warm-strong);
+      color: var(--bb-text-secondary);
+      background: transparent; cursor: pointer;
+      transition: all 0.2s var(--bb-ease-bounce);
+    }
+    .filter-pill:hover { background: var(--bb-cream); }
+    .filter-pill.active {
+      background: var(--bb-primary-10);
+      color: var(--bb-primary);
+      border-color: rgba(254, 78, 24, 0.25);
+    }
+    .sort-btn {
+      font-family: var(--bb-font-mono); font-size: 11px;
+      letter-spacing: 0.02em; text-transform: uppercase;
+      color: var(--bb-text-muted); background: none; border: none;
+      cursor: pointer; transition: color 0.15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .sort-btn:hover { color: var(--bb-text-primary); }
+    .sort-btn svg { width: 14px; height: 14px; }
+
+    /* ================================================
+       PROJECT GRID
+       ================================================ */
+    .project-section { padding: 48px var(--bb-site-padding) 120px; }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: var(--bb-max-width);
+      margin: 0 auto;
+    }
+    @media (max-width: 1024px) { .project-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) {
+      .project-grid { grid-template-columns: 1fr; }
+      .hero { padding: 120px 20px 60px; }
+      .hero-stats { gap: 32px; }
+      .filter-bar { padding: 12px 20px; }
+      .project-section { padding: 32px 20px 80px; }
+    }
+
+    /* ================================================
+       PROJECT CARD
+       ================================================ */
+    .project-card {
+      background: var(--bb-cream-lightest);
+      border: 1px solid var(--bb-border-warm);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: all 0.3s var(--bb-ease-bounce);
+    }
+    .project-card:hover {
+      box-shadow: var(--bb-shadow-md);
+      transform: translateY(-3px);
+    }
+    .project-card.hidden { display: none; }
+
+    .card-preview {
+      aspect-ratio: 16 / 10;
+      background: var(--bb-cream);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--bb-border-warm);
+    }
+    .card-preview iframe {
+      width: 1280px; height: 800px;
+      transform: scale(0.25);
+      transform-origin: top left;
+      pointer-events: none; border: none;
+      position: absolute; top: 0; left: 0;
+    }
+    .card-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bb-dark);
+      color: var(--bb-text-on-dark-subtle);
+      font-family: var(--bb-font-mono);
+      font-size: 48px; font-weight: 300;
+      letter-spacing: 0.05em;
+    }
+
+    .card-content { padding: 20px; }
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 12px;
+    }
+    .card-status {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--bb-font-mono); font-size: 10px;
+      letter-spacing: 0.03em; text-transform: uppercase;
+    }
+    .card-status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .card-status-dot.live { background: #34D399; box-shadow: 0 0 6px rgba(52, 211, 153, 0.4); }
+    .card-status-dot.template { background: var(--bb-neutral-light); }
+    .card-date {
+      font-family: var(--bb-font-mono); font-size: 10px;
+      color: var(--bb-text-subtle); letter-spacing: 0.02em;
+    }
+    .card-name {
+      font-size: 18px; font-weight: 600; line-height: 1.2;
+      letter-spacing: -0.01em; color: var(--bb-text-primary);
+      margin-bottom: 6px;
+    }
+    .card-desc {
+      font-size: 14px; line-height: 1.4; color: var(--bb-text-muted);
+      overflow: hidden; text-overflow: ellipsis;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+      margin-bottom: 16px;
+    }
+    .card-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .card-tag {
+      display: inline-flex; padding: 3px 10px;
+      font-family: var(--bb-font-mono); font-size: 10px;
+      letter-spacing: 0.02em;
+      border-radius: var(--bb-radius-full);
+      color: var(--bb-text-secondary);
+      border: 1px solid var(--bb-border-warm);
+      background: var(--bb-cream-lighter);
+    }
+    .card-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--bb-font-mono); font-size: 12px;
+      color: var(--bb-text-secondary);
+      transition: color 0.15s var(--bb-ease-bounce);
+    }
+    .card-link:hover { color: var(--bb-primary); }
+    .card-link svg { width: 12px; height: 12px; }
+
+    /* ================================================
+       FOOTER
+       ================================================ */
+    .footer {
+      background: var(--bb-dark); color: var(--bb-text-on-dark);
+      padding: 80px var(--bb-site-padding) 40px;
+    }
+    .footer-inner { max-width: var(--bb-max-width); margin: 0 auto; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr;
+      gap: 48px; margin-bottom: 64px;
+    }
+    .footer-brand-name {
+      font-family: var(--bb-font-mono); font-size: 13px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--bb-text-on-dark-muted); margin-bottom: 12px;
+    }
+    .footer-brand-name span { color: var(--bb-primary); }
+    .footer-brand-desc {
+      font-size: 14px; line-height: 1.5;
+      color: var(--bb-text-on-dark-subtle); max-width: 320px;
+    }
+    .footer-col-title {
+      font-family: var(--bb-font-mono); font-size: 10px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      color: var(--bb-text-on-dark-subtle); margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-links a { font-size: 14px; color: var(--bb-text-on-dark-muted); transition: color 0.15s; }
+    .footer-links a:hover { color: var(--bb-text-on-dark); }
+    .footer-bottom {
+      border-top: 1px solid var(--bb-border-cool-strong);
+      padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-copy { font-family: var(--bb-font-mono); font-size: 11px; color: var(--bb-text-on-dark-subtle); }
+    .footer-meta { font-family: var(--bb-font-mono); font-size: 10px; color: var(--bb-text-on-dark-subtle); letter-spacing: 0.03em; }
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
   </style>
 </head>
-<body class="bg-surface-1 text-zinc-200 antialiased">
 
-  <!-- ═══ DARK HERO ═══ -->
-  <header class="relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-b from-surface-1 via-surface-2 to-surface-3"></div>
-    <nav class="relative z-10 max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
-      <a href="/" class="text-lg font-bold tracking-tight text-white">ProjectName</a>
-      <div class="flex items-center gap-8">
-        <a href="#features" class="text-sm text-zinc-400 hover:text-white transition-colors">Features</a>
-        <a href="#about" class="text-sm text-zinc-400 hover:text-white transition-colors">About</a>
-        <a href="#cta" class="text-sm font-medium text-surface-1 bg-coral px-4 py-2 rounded-lg hover:bg-coral-light transition-colors">Get Started</a>
-      </div>
-    </nav>
-    <div class="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-32 text-center">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-coral/10 border border-coral/20 rounded-full text-xs font-medium text-coral font-mono mb-8">
-        <span class="w-1.5 h-1.5 bg-coral rounded-full"></span>
-        STATUS OR TAGLINE
-      </div>
-      <h1 class="text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-[1.1] mb-6">
-        Your headline goes here<span class="text-coral">.</span>
-      </h1>
-      <p class="text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed mb-10">
-        A clear, concise description of what this project does and why someone should care. Keep it to two sentences max.
-      </p>
-      <div class="flex items-center justify-center gap-4">
-        <a href="#cta" class="bg-coral text-surface-1 font-semibold px-6 py-3 rounded-lg hover:bg-coral-light transition-colors">Primary Action</a>
-        <a href="#features" class="border border-surface-4 text-zinc-300 font-medium px-6 py-3 rounded-lg hover:bg-surface-3 transition-colors">Learn More</a>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo"><span>BB</span> Directory</div>
+    <ul class="nav-links">
+      <li><a href="https://brightbase.bbase.ai" target="_blank">Brightbase</a></li>
+      <li><a href="https://style.bbase.ai" target="_blank">DS3</a></li>
+      <li><a href="https://github.com/bbagent-01" target="_blank">GitHub</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-inner">
+      <div class="hero-eyebrow bb-label">Brightbase / Directory</div>
+      <h1 class="hero-title bb-heading bb-reveal">Project Directory</h1>
+      <p class="hero-description bb-fade-in">Every site, tool, and template deployed across the bbase.ai network. Built with Brightbase Design System v3.</p>
+      <div class="hero-stats bb-fade-in">
+        <div>
+          <div class="hero-stat-number">16</div>
+          <div class="hero-stat-label">Projects</div>
+        </div>
+        <div>
+          <div class="hero-stat-number">14</div>
+          <div class="hero-stat-label">Live</div>
+        </div>
+        <div>
+          <div class="hero-stat-number">2</div>
+          <div class="hero-stat-label">Templates</div>
+        </div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <!-- ═══ LIGHT BODY ═══ -->
-  <main class="bg-zinc-50 text-zinc-900">
-
-    <!-- Features -->
-    <section id="features" class="max-w-6xl mx-auto px-6 py-24">
-      <div class="text-center mb-16">
-        <p class="text-sm font-semibold text-coral uppercase tracking-wider mb-3">Features</p>
-        <h2 class="text-3xl font-bold tracking-tight">What makes this different</h2>
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-inner">
+      <div class="filter-pills">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="nextjs">Next.js</button>
+        <button class="filter-pill" data-filter="react">React + Vite</button>
+        <button class="filter-pill" data-filter="static">Static HTML</button>
+        <button class="filter-pill" data-filter="template">Template</button>
       </div>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white border border-zinc-200 rounded-xl p-8">
-          <div class="w-10 h-10 bg-coral/10 rounded-lg flex items-center justify-center mb-4">
-            <span class="text-coral font-bold">01</span>
-          </div>
-          <h3 class="text-lg font-semibold mb-2">Feature One</h3>
-          <p class="text-zinc-500 leading-relaxed">Describe the feature and its benefit to the user. Keep it brief and benefit-focused.</p>
+      <button class="sort-btn" id="sortBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7-7 7 7"/></svg>
+        Latest first
+      </button>
+    </div>
+  </div>
+
+  <!-- PROJECT GRID -->
+  <section class="project-section">
+    <div class="project-grid bb-stagger-group" id="projectGrid">
+
+      <!-- ds3 -->
+      <div class="project-card" data-type="static" data-updated="2026-04-02" data-name="ds3">
+        <div class="card-preview">
+          <iframe data-src="https://ds3.bbase.ai" loading="lazy" title="DS3 preview"></iframe>
         </div>
-        <div class="bg-white border border-zinc-200 rounded-xl p-8">
-          <div class="w-10 h-10 bg-coral/10 rounded-lg flex items-center justify-center mb-4">
-            <span class="text-coral font-bold">02</span>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Apr 2, 2026</div>
           </div>
-          <h3 class="text-lg font-semibold mb-2">Feature Two</h3>
-          <p class="text-zinc-500 leading-relaxed">Describe the feature and its benefit to the user. Keep it brief and benefit-focused.</p>
-        </div>
-        <div class="bg-white border border-zinc-200 rounded-xl p-8">
-          <div class="w-10 h-10 bg-coral/10 rounded-lg flex items-center justify-center mb-4">
-            <span class="text-coral font-bold">03</span>
+          <div class="card-name">DS3</div>
+          <div class="card-desc">Design System v3 — interactive showcase with cream-first palette, scroll animations, and component library.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">Lenis</span>
+            <span class="card-tag">GSAP</span>
           </div>
-          <h3 class="text-lg font-semibold mb-2">Feature Three</h3>
-          <p class="text-zinc-500 leading-relaxed">Describe the feature and its benefit to the user. Keep it brief and benefit-focused.</p>
+          <a href="https://ds3.bbase.ai" target="_blank" class="card-link">ds3.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
         </div>
       </div>
-    </section>
 
-    <!-- About -->
-    <section id="about" class="border-t border-zinc-200">
-      <div class="max-w-4xl mx-auto px-6 py-24 text-center">
-        <h2 class="text-3xl font-bold tracking-tight mb-6">About this project</h2>
-        <p class="text-lg text-zinc-500 leading-relaxed max-w-2xl mx-auto">
-          A longer description of the project, its background, and context. This section can be multiple paragraphs if needed.
-        </p>
+      <!-- partners -->
+      <div class="project-card" data-type="static" data-updated="2026-04-01" data-name="partners">
+        <div class="card-preview">
+          <iframe data-src="https://partners.bbase.ai" loading="lazy" title="Partners preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Apr 1, 2026</div>
+          </div>
+          <div class="card-name">Partners</div>
+          <div class="card-desc">Brightbase Partner Program landing page with visual editor and inline annotations.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">React CDN</span>
+          </div>
+          <a href="https://partners.bbase.ai" target="_blank" class="card-link">partners.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
       </div>
-    </section>
 
-    <!-- CTA -->
-    <section id="cta" class="border-t border-zinc-200 bg-white">
-      <div class="max-w-4xl mx-auto px-6 py-24 text-center">
-        <h2 class="text-3xl font-bold tracking-tight mb-4">Ready to get started?</h2>
-        <p class="text-zinc-500 mb-8">Call to action supporting text.</p>
-        <a href="mailto:hello@brightbase.co" class="inline-block bg-surface-1 text-white font-semibold px-8 py-3.5 rounded-lg hover:bg-zinc-800 transition-colors">Get in Touch</a>
+      <!-- brightbase -->
+      <div class="project-card" data-type="nextjs" data-updated="2026-03-31" data-name="brightbase">
+        <div class="card-preview">
+          <iframe data-src="https://brightbase.bbase.ai" loading="lazy" title="Brightbase preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 31, 2026</div>
+          </div>
+          <div class="card-name">Brightbase</div>
+          <div class="card-desc">Main agency website — fractional creative services for B2B SaaS with CMS-driven content.</div>
+          <div class="card-tags">
+            <span class="card-tag">Next.js 15</span>
+            <span class="card-tag">Sanity CMS</span>
+          </div>
+          <a href="https://brightbase.bbase.ai" target="_blank" class="card-link">brightbase.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
       </div>
-    </section>
-  </main>
 
-  <!-- ═══ DARK FOOTER ═══ -->
-  <footer class="bg-surface-1 border-t border-surface-4">
-    <div class="max-w-6xl mx-auto px-6 py-8 flex items-center justify-between">
-      <p class="text-sm text-zinc-600">&copy; 2026 ProjectName. All rights reserved.</p>
-      <p class="text-xs text-zinc-700 font-mono">built on bbase.dev</p>
+      <!-- onedegree-bnb -->
+      <div class="project-card" data-type="static" data-updated="2026-03-31" data-name="onedegree-bnb">
+        <div class="card-preview">
+          <iframe data-src="https://onedegree-bnb.bbase.ai" loading="lazy" title="OneDegree BnB preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 31, 2026</div>
+          </div>
+          <div class="card-name">OneDegree BnB</div>
+          <div class="card-desc">Trust-based short-term rental platform — rent between people you know and trust.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">CSS</span>
+          </div>
+          <a href="https://onedegree-bnb.bbase.ai" target="_blank" class="card-link">onedegree-bnb.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- brightbase-ds -->
+      <div class="project-card" data-type="nextjs" data-updated="2026-03-30" data-name="brightbase-ds">
+        <div class="card-preview">
+          <iframe data-src="https://brightbase-ds.bbase.ai" loading="lazy" title="DS Workbench preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 30, 2026</div>
+          </div>
+          <div class="card-name">DS Workbench</div>
+          <div class="card-desc">Design system development workbench with token generation, color manipulation, and component showcase.</div>
+          <div class="card-tags">
+            <span class="card-tag">Next.js 16</span>
+            <span class="card-tag">Zustand</span>
+          </div>
+          <a href="https://brightbase-ds.bbase.ai" target="_blank" class="card-link">brightbase-ds.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- brightbase-style-guide -->
+      <div class="project-card" data-type="static" data-updated="2026-03-30" data-name="brightbase-style-guide">
+        <div class="card-preview">
+          <iframe data-src="https://brightbase-style-guide.bbase.ai" loading="lazy" title="Style Guide preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 30, 2026</div>
+          </div>
+          <div class="card-name">Style Guide</div>
+          <div class="card-desc">Comprehensive component reference with typography showcase, color palette, and icon system docs.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">Chroma.js</span>
+          </div>
+          <a href="https://brightbase-style-guide.bbase.ai" target="_blank" class="card-link">brightbase-style-guide.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- hero-animation -->
+      <div class="project-card" data-type="static" data-updated="2026-03-30" data-name="hero-animation">
+        <div class="card-preview">
+          <iframe data-src="https://hero-animation.bbase.ai" loading="lazy" title="Hero Animation preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 30, 2026</div>
+          </div>
+          <div class="card-name">Hero Animation</div>
+          <div class="card-desc">Canvas-based hero section experiments with interactive editor for real-time parameter tuning.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">Canvas</span>
+          </div>
+          <a href="https://hero-animation.bbase.ai" target="_blank" class="card-link">hero-animation.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- bb-artgen -->
+      <div class="project-card" data-type="react" data-updated="2026-03-26" data-name="bb-artgen">
+        <div class="card-preview">
+          <iframe data-src="https://bb-artgen.bbase.ai" loading="lazy" title="BB Artgen preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 26, 2026</div>
+          </div>
+          <div class="card-name">BB Artgen</div>
+          <div class="card-desc">WebGL-based generative art tool with shader-driven palette generation and interactive editor.</div>
+          <div class="card-tags">
+            <span class="card-tag">React</span>
+            <span class="card-tag">Vite</span>
+            <span class="card-tag">WebGL</span>
+          </div>
+          <a href="https://bb-artgen.bbase.ai" target="_blank" class="card-link">bb-artgen.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- ds-preview -->
+      <div class="project-card" data-type="nextjs" data-updated="2026-03-26" data-name="ds-preview">
+        <div class="card-preview">
+          <iframe data-src="https://ds-preview.bbase.ai" loading="lazy" title="DS Preview preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 26, 2026</div>
+          </div>
+          <div class="card-name">DS Preview</div>
+          <div class="card-desc">Design system preview and documentation site with auto-deploy via GitHub Actions.</div>
+          <div class="card-tags">
+            <span class="card-tag">Next.js</span>
+            <span class="card-tag">Tailwind v4</span>
+          </div>
+          <a href="https://ds-preview.bbase.ai" target="_blank" class="card-link">ds-preview.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- llp -->
+      <div class="project-card" data-type="nextjs" data-updated="2026-03-26" data-name="llp">
+        <div class="card-preview">
+          <iframe data-src="https://llp.bbase.ai" loading="lazy" title="LLP preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 26, 2026</div>
+          </div>
+          <div class="card-name">LLP</div>
+          <div class="card-desc">Apartment shopping list application for tracking and comparing rental properties.</div>
+          <div class="card-tags">
+            <span class="card-tag">Next.js 15</span>
+            <span class="card-tag">Tailwind v4</span>
+          </div>
+          <a href="https://llp.bbase.ai" target="_blank" class="card-link">llp.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- textures -->
+      <div class="project-card" data-type="static" data-updated="2026-03-26" data-name="textures">
+        <div class="card-preview">
+          <iframe data-src="https://textures.bbase.ai" loading="lazy" title="Textures preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 26, 2026</div>
+          </div>
+          <div class="card-name">Texture Lab</div>
+          <div class="card-desc">Creative texture generation laboratory with canvas-based previews and parameter controls.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">Canvas</span>
+          </div>
+          <a href="https://textures.bbase.ai" target="_blank" class="card-link">textures.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- deck1 -->
+      <div class="project-card" data-type="static" data-updated="2026-03-20" data-name="deck1">
+        <div class="card-preview">
+          <iframe data-src="https://deck1.bbase.ai" loading="lazy" title="Deck 1 preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 20, 2026</div>
+          </div>
+          <div class="card-name">Deck 1</div>
+          <div class="card-desc">Presentation slide deck template built on the bbase landing pattern.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">Tailwind</span>
+          </div>
+          <a href="https://deck1.bbase.ai" target="_blank" class="card-link">deck1.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- dsg -->
+      <div class="project-card" data-type="react" data-updated="2026-03-20" data-name="dsg">
+        <div class="card-preview">
+          <iframe data-src="https://dsg.bbase.ai" loading="lazy" title="DSG preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 20, 2026</div>
+          </div>
+          <div class="card-name">DS Generator</div>
+          <div class="card-desc">Interactive design system generator tool for creating and previewing design systems visually.</div>
+          <div class="card-tags">
+            <span class="card-tag">React</span>
+            <span class="card-tag">Vite</span>
+          </div>
+          <a href="https://dsg.bbase.ai" target="_blank" class="card-link">dsg.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- bbase-app-template -->
+      <div class="project-card" data-type="template" data-updated="2026-03-20" data-name="bbase-app-template">
+        <div class="card-preview">
+          <div class="card-placeholder">APP</div>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot template"></div> Template</div>
+            <div class="card-date">Mar 20, 2026</div>
+          </div>
+          <div class="card-name">App Template</div>
+          <div class="card-desc">Next.js 15 starter template pre-configured for Cloudflare Pages with App Router and Tailwind v4.</div>
+          <div class="card-tags">
+            <span class="card-tag">Next.js 15</span>
+            <span class="card-tag">Tailwind v4</span>
+          </div>
+          <a href="https://github.com/bbagent-01/bbase-app-template" target="_blank" class="card-link">GitHub repo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- bbase-landing-template -->
+      <div class="project-card" data-type="template" data-updated="2026-03-20" data-name="bbase-landing-template">
+        <div class="card-preview">
+          <div class="card-placeholder">HTML</div>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot template"></div> Template</div>
+            <div class="card-date">Mar 20, 2026</div>
+          </div>
+          <div class="card-name">Landing Template</div>
+          <div class="card-desc">Minimal zero-build static HTML landing page template with Tailwind CSS via CDN.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">Tailwind</span>
+          </div>
+          <a href="https://github.com/bbagent-01/bbase-landing-template" target="_blank" class="card-link">GitHub repo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+      <!-- bbase-test -->
+      <div class="project-card" data-type="static" data-updated="2026-03-19" data-name="bbase-test">
+        <div class="card-preview">
+          <iframe data-src="https://bbase-test.bbase.ai" loading="lazy" title="Deploy Test preview"></iframe>
+        </div>
+        <div class="card-content">
+          <div class="card-header">
+            <div class="card-status"><div class="card-status-dot live"></div> Live</div>
+            <div class="card-date">Mar 19, 2026</div>
+          </div>
+          <div class="card-name">Deploy Test</div>
+          <div class="card-desc">Deployment verification page — confirms the bbase.ai deploy pipeline works end to end.</div>
+          <div class="card-tags">
+            <span class="card-tag">HTML</span>
+            <span class="card-tag">CSS</span>
+          </div>
+          <a href="https://bbase-test.bbase.ai" target="_blank" class="card-link">bbase-test.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name"><span>BB</span> Directory</div>
+          <p class="footer-brand-desc">All Brightbase projects deployed across the bbase.ai network. Built with DS3 tokens and animations.</p>
+        </div>
+        <div>
+          <div class="footer-col-title">Projects</div>
+          <ul class="footer-links">
+            <li><a href="https://brightbase.bbase.ai" target="_blank">Brightbase</a></li>
+            <li><a href="https://ds3.bbase.ai" target="_blank">DS3</a></li>
+            <li><a href="https://partners.bbase.ai" target="_blank">Partners</a></li>
+            <li><a href="https://textures.bbase.ai" target="_blank">Texture Lab</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">Resources</div>
+          <ul class="footer-links">
+            <li><a href="https://github.com/bbagent-01" target="_blank">GitHub</a></li>
+            <li><a href="https://style.bbase.ai" target="_blank">Design System</a></li>
+            <li><a href="https://brightbase-style-guide.bbase.ai" target="_blank">Style Guide</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">Brightbase 2026</div>
+        <div class="footer-meta">Geist + Fragment Mono</div>
+      </div>
     </div>
   </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/split-type"></script>
+
+  <script>
+  (function () {
+    'use strict';
+
+    /* ---- Lenis Smooth Scroll ---- */
+    function initLenis() {
+      if (typeof Lenis === 'undefined') return;
+      var lenis = new Lenis({ lerp: 0.1, duration: 1.2, smoothWheel: true, wheelMultiplier: 1 });
+      if (typeof gsap !== 'undefined') {
+        gsap.ticker.add(function(time) { lenis.raf(time * 1000); });
+        gsap.ticker.lagSmoothing(0);
+      } else {
+        (function raf(time) { lenis.raf(time); requestAnimationFrame(raf); })(performance.now());
+      }
+    }
+
+    /* ---- Headline Reveals ---- */
+    function initHeadlineReveals() {
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      document.querySelectorAll('.bb-reveal').forEach(function(el) {
+        if (typeof SplitType !== 'undefined') {
+          var split = new SplitType(el, { types: 'words' });
+          split.words.forEach(function(word) {
+            var wrapper = document.createElement('span');
+            wrapper.style.cssText = 'display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:0.1em';
+            word.parentNode.insertBefore(wrapper, word);
+            wrapper.appendChild(word);
+          });
+          gsap.set(split.words, { yPercent: 110, opacity: 0 });
+          gsap.to(split.words, {
+            yPercent: 0, opacity: 1, duration: 0.8, stagger: 0.04, ease: 'power3.out',
+            scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play reverse play reverse' }
+          });
+        }
+      });
+    }
+
+    /* ---- Fade Ins ---- */
+    function initFadeIns() {
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      document.querySelectorAll('.bb-fade-in').forEach(function(el) {
+        gsap.set(el, { y: 30, opacity: 0 });
+        gsap.to(el, {
+          y: 0, opacity: 1, duration: 0.6, ease: 'power2.out',
+          scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play reverse play reverse' }
+        });
+      });
+    }
+
+    /* ---- Stagger Groups ---- */
+    function initStaggerGroups() {
+      if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+      document.querySelectorAll('.bb-stagger-group').forEach(function(group) {
+        var children = Array.from(group.children).filter(function(c) { return !c.classList.contains('hidden'); });
+        gsap.set(children, { y: 40, opacity: 0 });
+        gsap.to(children, {
+          y: 0, opacity: 1, duration: 0.6, stagger: 0.08, ease: 'power2.out',
+          scrollTrigger: { trigger: group, start: 'top 85%', toggleActions: 'play reverse play reverse' }
+        });
+      });
+    }
+
+    /* ---- Lazy Load Iframes ---- */
+    function initLazyIframes() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            var iframe = entry.target.querySelector('iframe[data-src]');
+            if (iframe) {
+              iframe.src = iframe.dataset.src;
+              iframe.removeAttribute('data-src');
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '200px' });
+
+      document.querySelectorAll('.card-preview').forEach(function(el) {
+        if (el.querySelector('iframe[data-src]')) observer.observe(el);
+      });
+    }
+
+    /* ---- Filtering ---- */
+    function initFilters() {
+      var pills = document.querySelectorAll('.filter-pill');
+      var cards = document.querySelectorAll('.project-card');
+
+      pills.forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          pills.forEach(function(p) { p.classList.remove('active'); });
+          pill.classList.add('active');
+          var filter = pill.dataset.filter;
+          cards.forEach(function(card) {
+            card.classList.toggle('hidden', filter !== 'all' && card.dataset.type !== filter);
+          });
+        });
+      });
+    }
+
+    /* ---- Sorting ---- */
+    function initSort() {
+      var btn = document.getElementById('sortBtn');
+      var grid = document.getElementById('projectGrid');
+      var sortByDate = true;
+
+      btn.addEventListener('click', function() {
+        sortByDate = !sortByDate;
+        btn.innerHTML = sortByDate
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7-7 7 7"/></svg> Latest first'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h12M3 18h6"/></svg> A — Z';
+
+        var cards = Array.from(grid.querySelectorAll('.project-card'));
+        cards.sort(function(a, b) {
+          return sortByDate
+            ? b.dataset.updated.localeCompare(a.dataset.updated)
+            : a.dataset.name.localeCompare(b.dataset.name);
+        });
+        cards.forEach(function(card) { grid.appendChild(card); });
+      });
+    }
+
+    /* ---- Init ---- */
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+      }
+      initLenis();
+      initLazyIframes();
+      initFilters();
+      initSort();
+      requestAnimationFrame(function() {
+        initHeadlineReveals();
+        initFadeIns();
+        initStaggerGroups();
+      });
+    });
+  })();
+  </script>
 
 </body>
 </html>
