@@ -225,7 +225,6 @@
     }
     .card-preview iframe {
       width: 1280px; height: 800px;
-      transform: scale(0.25);
       transform-origin: top left;
       pointer-events: none; border: none;
       position: absolute; top: 0; left: 0;
@@ -291,6 +290,71 @@
     }
     .card-link:hover { color: var(--bb-primary); }
     .card-link svg { width: 12px; height: 12px; }
+
+    /* Archive checkbox */
+    .card-archive {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 12px; padding-top: 12px;
+      border-top: 1px solid var(--bb-border-warm);
+      cursor: pointer; user-select: none;
+    }
+    .card-archive input[type="checkbox"] {
+      appearance: none; -webkit-appearance: none;
+      width: 16px; height: 16px; border-radius: 4px;
+      border: 1.5px solid var(--bb-border-warm-strong);
+      background: var(--bb-cream-lighter);
+      cursor: pointer; position: relative; flex-shrink: 0;
+      transition: all 0.15s var(--bb-ease-bounce);
+    }
+    .card-archive input[type="checkbox"]:checked {
+      background: var(--bb-primary);
+      border-color: var(--bb-primary);
+    }
+    .card-archive input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute; top: 2px; left: 5px;
+      width: 4px; height: 8px;
+      border: solid white; border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    .card-archive span {
+      font-family: var(--bb-font-mono); font-size: 10px;
+      letter-spacing: 0.02em; text-transform: uppercase;
+      color: var(--bb-text-subtle);
+      transition: color 0.15s;
+    }
+    .card-archive:has(input:checked) span { color: var(--bb-primary); }
+    .project-card.marked-archive {
+      border-color: rgba(254, 78, 24, 0.3);
+      background: rgba(254, 78, 24, 0.03);
+    }
+
+    /* Archive banner */
+    .archive-banner {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 90; background: var(--bb-dark);
+      border-top: 2px solid var(--bb-primary);
+      padding: 16px var(--bb-site-padding);
+    }
+    .archive-banner.visible { display: block; }
+    .archive-banner-inner {
+      max-width: var(--bb-max-width); margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .archive-banner-text {
+      font-family: var(--bb-font-mono); font-size: 13px;
+      color: var(--bb-text-on-dark);
+    }
+    .archive-banner-text strong { color: var(--bb-primary); }
+    .archive-banner-btn {
+      font-family: var(--bb-font-mono); font-size: 11px;
+      letter-spacing: 0.02em; text-transform: uppercase;
+      padding: 8px 20px; border-radius: var(--bb-radius-full);
+      background: var(--bb-primary); color: white;
+      border: none; cursor: pointer;
+      transition: all 0.2s var(--bb-ease-bounce);
+    }
+    .archive-banner-btn:hover { transform: translateY(-1px); box-shadow: var(--bb-shadow-glow-primary); }
 
     /* ================================================
        FOOTER
@@ -412,6 +476,7 @@
             <span class="card-tag">GSAP</span>
           </div>
           <a href="https://style.bbase.ai" target="_blank" class="card-link">style.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="ds3"><span>Archive</span></label>
         </div>
       </div>
 
@@ -433,6 +498,7 @@
             <span class="card-tag">React CDN</span>
           </div>
           <a href="https://partners.bbase.ai" target="_blank" class="card-link">partners.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="partners"><span>Archive</span></label>
         </div>
       </div>
 
@@ -454,6 +520,7 @@
             <span class="card-tag">Sanity CMS</span>
           </div>
           <a href="https://01.bbase.ai" target="_blank" class="card-link">01.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="brightbase"><span>Archive</span></label>
         </div>
       </div>
 
@@ -475,6 +542,7 @@
             <span class="card-tag">CSS</span>
           </div>
           <a href="https://onedegree.bbase.ai" target="_blank" class="card-link">onedegree.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="onedegree-bnb"><span>Archive</span></label>
         </div>
       </div>
 
@@ -495,6 +563,7 @@
             <span class="card-tag">Next.js</span>
           </div>
           <a href="https://app.onedegree.bbase.ai" target="_blank" class="card-link">app.onedegree.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="onedegree-app"><span>Archive</span></label>
         </div>
       </div>
 
@@ -516,6 +585,7 @@
             <span class="card-tag">Zustand</span>
           </div>
           <a href="https://ds3.bbase.ai" target="_blank" class="card-link">ds3.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="brightbase-ds"><span>Archive</span></label>
         </div>
       </div>
 
@@ -537,6 +607,7 @@
             <span class="card-tag">Chroma.js</span>
           </div>
           <a href="https://github.com/bbagent-01/brightbase-style-guide" target="_blank" class="card-link">Local only <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="brightbase-style-guide"><span>Archive</span></label>
         </div>
       </div>
 
@@ -558,6 +629,7 @@
             <span class="card-tag">Canvas</span>
           </div>
           <a href="https://github.com/bbagent-01/hero-animation" target="_blank" class="card-link">Local only <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="hero-animation"><span>Archive</span></label>
         </div>
       </div>
 
@@ -580,6 +652,7 @@
             <span class="card-tag">WebGL</span>
           </div>
           <a href="https://artgen.bbase.ai" target="_blank" class="card-link">artgen.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="bb-artgen"><span>Archive</span></label>
         </div>
       </div>
 
@@ -601,6 +674,7 @@
             <span class="card-tag">Tailwind v4</span>
           </div>
           <a href="https://ds-preview.bbase.ai" target="_blank" class="card-link">ds-preview.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="ds-preview"><span>Archive</span></label>
         </div>
       </div>
 
@@ -622,6 +696,7 @@
             <span class="card-tag">Tailwind v4</span>
           </div>
           <a href="https://llp.bbase.ai" target="_blank" class="card-link">llp.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="llp"><span>Archive</span></label>
         </div>
       </div>
 
@@ -643,6 +718,7 @@
             <span class="card-tag">Canvas</span>
           </div>
           <a href="https://github.com/bbagent-01/textures" target="_blank" class="card-link">Local only <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="textures"><span>Archive</span></label>
         </div>
       </div>
 
@@ -663,6 +739,7 @@
             <span class="card-tag">Unknown</span>
           </div>
           <a href="https://gta.bbase.ai" target="_blank" class="card-link">gta.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="gta"><span>Archive</span></label>
         </div>
       </div>
 
@@ -684,6 +761,7 @@
             <span class="card-tag">Tailwind</span>
           </div>
           <a href="https://deck1.bbase.ai" target="_blank" class="card-link">deck1.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="deck1"><span>Archive</span></label>
         </div>
       </div>
 
@@ -705,6 +783,7 @@
             <span class="card-tag">Vite</span>
           </div>
           <a href="https://dsg.bbase.ai" target="_blank" class="card-link">dsg.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="dsg"><span>Archive</span></label>
         </div>
       </div>
 
@@ -726,6 +805,7 @@
             <span class="card-tag">Tailwind v4</span>
           </div>
           <a href="https://github.com/bbagent-01/bbase-app-template" target="_blank" class="card-link">GitHub repo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="bbase-app-template"><span>Archive</span></label>
         </div>
       </div>
 
@@ -747,6 +827,7 @@
             <span class="card-tag">Tailwind</span>
           </div>
           <a href="https://github.com/bbagent-01/bbase-landing-template" target="_blank" class="card-link">GitHub repo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="bbase-landing-template"><span>Archive</span></label>
         </div>
       </div>
 
@@ -768,11 +849,20 @@
             <span class="card-tag">CSS</span>
           </div>
           <a href="https://test.bbase.ai" target="_blank" class="card-link">test.bbase.ai <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+          <label class="card-archive"><input type="checkbox" data-project="bbase-test"><span>Archive</span></label>
         </div>
       </div>
 
     </div>
   </section>
+
+  <!-- ARCHIVE BANNER -->
+  <div class="archive-banner" id="archiveBanner">
+    <div class="archive-banner-inner">
+      <div class="archive-banner-text"><strong id="archiveCount">0</strong> projects marked for archive</div>
+      <button class="archive-banner-btn" id="archiveCopyBtn">Copy list</button>
+    </div>
+  </div>
 
   <!-- FOOTER -->
   <footer class="footer">
@@ -875,6 +965,18 @@
       });
     }
 
+    /* ---- Scale iframes to fill preview ---- */
+    function scaleIframes() {
+      document.querySelectorAll('.card-preview').forEach(function(container) {
+        var iframe = container.querySelector('iframe');
+        if (!iframe) return;
+        var cw = container.offsetWidth;
+        var ch = container.offsetHeight;
+        var scale = Math.max(cw / 1280, ch / 800);
+        iframe.style.transform = 'scale(' + scale + ')';
+      });
+    }
+
     /* ---- Lazy Load Iframes ---- */
     function initLazyIframes() {
       var observer = new IntersectionObserver(function(entries) {
@@ -893,6 +995,9 @@
       document.querySelectorAll('.card-preview').forEach(function(el) {
         if (el.querySelector('iframe[data-src]')) observer.observe(el);
       });
+
+      scaleIframes();
+      window.addEventListener('resize', scaleIframes);
     }
 
     /* ---- Filtering ---- */
@@ -934,6 +1039,37 @@
       });
     }
 
+    /* ---- Archive Checkboxes ---- */
+    function initArchive() {
+      var banner = document.getElementById('archiveBanner');
+      var countEl = document.getElementById('archiveCount');
+      var copyBtn = document.getElementById('archiveCopyBtn');
+      var checkboxes = document.querySelectorAll('.card-archive input[type="checkbox"]');
+
+      function updateBanner() {
+        var checked = document.querySelectorAll('.card-archive input:checked');
+        countEl.textContent = checked.length;
+        banner.classList.toggle('visible', checked.length > 0);
+      }
+
+      checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+          cb.closest('.project-card').classList.toggle('marked-archive', cb.checked);
+          updateBanner();
+        });
+      });
+
+      copyBtn.addEventListener('click', function() {
+        var checked = document.querySelectorAll('.card-archive input:checked');
+        var list = Array.from(checked).map(function(cb) { return cb.dataset.project; });
+        var text = 'Archive these: ' + list.join(', ');
+        navigator.clipboard.writeText(text).then(function() {
+          copyBtn.textContent = 'Copied!';
+          setTimeout(function() { copyBtn.textContent = 'Copy list'; }, 2000);
+        });
+      });
+    }
+
     /* ---- Init ---- */
     document.addEventListener('DOMContentLoaded', function() {
       if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
@@ -943,6 +1079,7 @@
       initLazyIframes();
       initFilters();
       initSort();
+      initArchive();
       requestAnimationFrame(function() {
         initHeadlineReveals();
         initFadeIns();
